@@ -3,7 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplication", "CompanionApplication\CompanionApplication.csproj", "{48D421D2-E2F7-4A96-9FF6-18945A7F3241}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MediaApplicationInterfaces", "MediaApplicationInterfaces", "{C2F335F0-7309-495F-A9D3-14BB156DD108}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTunesInterface", "MediaApplicationInterfaces\CompanionApplication.MediaApplicationInterface.iTunes\iTunesInterface.csproj", "{A567371D-1631-4596-B136-566DC8D05AEA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{220EB77E-7E5F-4F2A-88A3-671F3A59C207} = {220EB77E-7E5F-4F2A-88A3-671F3A59C207}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplicationCore", "CompanionApplication\CompanionApplicationCore.csproj", "{220EB77E-7E5F-4F2A-88A3-671F3A59C207}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplicationInterface", "CompanionApplicationInterface\CompanionApplicationInterface.csproj", "{78F8BA9F-4894-4348-8798-AC4DDA023DDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,13 +20,24 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{48D421D2-E2F7-4A96-9FF6-18945A7F3241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48D421D2-E2F7-4A96-9FF6-18945A7F3241}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48D421D2-E2F7-4A96-9FF6-18945A7F3241}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48D421D2-E2F7-4A96-9FF6-18945A7F3241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A567371D-1631-4596-B136-566DC8D05AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A567371D-1631-4596-B136-566DC8D05AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A567371D-1631-4596-B136-566DC8D05AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A567371D-1631-4596-B136-566DC8D05AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{220EB77E-7E5F-4F2A-88A3-671F3A59C207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{220EB77E-7E5F-4F2A-88A3-671F3A59C207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{220EB77E-7E5F-4F2A-88A3-671F3A59C207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{220EB77E-7E5F-4F2A-88A3-671F3A59C207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78F8BA9F-4894-4348-8798-AC4DDA023DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F8BA9F-4894-4348-8798-AC4DDA023DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F8BA9F-4894-4348-8798-AC4DDA023DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F8BA9F-4894-4348-8798-AC4DDA023DDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A567371D-1631-4596-B136-566DC8D05AEA} = {C2F335F0-7309-495F-A9D3-14BB156DD108}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23EFEFE1-5D56-4DA7-8429-FCA9EBCE6024}
