@@ -10,9 +10,11 @@ namespace CompanionApplication
         // Used for MEF, contains parts
         private CompositionContainer _container;
 
+#pragma warning disable CS0649
         // Import all available Media Application Interfaces
         [ImportMany]
         internal IEnumerable<Lazy<IGetMediaApplicationInterface, IGetMediaApplicationInterfaceData>> MediaApplicationInterfaces;
+#pragma warning restore
 
         /// <summary>
         /// Instantiate a RemoteManager object

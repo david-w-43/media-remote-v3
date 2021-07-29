@@ -60,7 +60,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CompanionApplication\CompanionApplicationCore.csproj">
+    <ProjectReference Include="..\..\CompanionApplicationCore\CompanionApplicationCore.csproj">
       <Project>{220eb77e-7e5f-4f2a-88a3-671f3a59c207}</Project>
       <Name>CompanionApplicationCore</Name>
     </ProjectReference>
