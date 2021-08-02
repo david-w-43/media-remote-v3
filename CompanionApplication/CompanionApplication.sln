@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTunesInterface", "MediaApp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplicationCore", "CompanionApplicationCore\CompanionApplicationCore.csproj", "{220EB77E-7E5F-4F2A-88A3-671F3A59C207}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplicationInterface", "CompanionApplicationInterface\CompanionApplicationInterface.csproj", "{78F8BA9F-4894-4348-8798-AC4DDA023DDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplication.Interface", "CompanionApplicationInterface\CompanionApplication.Interface.csproj", "{78F8BA9F-4894-4348-8798-AC4DDA023DDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
