@@ -71,27 +71,38 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
         /// </summary>
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // Get updated playback settings
-            if (GetPlaybackSettings(out PlaybackSettings updatedSettings))
+            try
             {
-                // Update property
-                PlaybackSettings = updatedSettings;
-
-                PlaybackSettingsChanged?.Invoke(this, new PlaybackSettingsUpdateEventArgs()
+                if (_application.CurrentTrack != null)
                 {
-                    PlaybackSettings = updatedSettings
-                });
+                    // Get updated playback settings
+                    if (GetPlaybackSettings(out PlaybackSettings updatedSettings))
+                    {
+                        // Update property
+                        PlaybackSettings = updatedSettings;
+
+                        PlaybackSettingsChanged?.Invoke(this, new PlaybackSettingsUpdateEventArgs()
+                        {
+                            PlaybackSettings = updatedSettings
+                        });
+                    }
+
+                    // Get updated playback position
+                    if (GetPlaybackPosition(out int updatedPosition))
+                    {
+                        PlaybackPosition = updatedPosition;
+
+                        PlaybackPositionChanged?.Invoke(this, new PlaybackPositionUpdateEventArgs()
+                        {
+                            PlaybackPosition = updatedPosition
+                        });
+                    } 
+                }
             }
-
-            // Get updated playback position
-            if (GetPlaybackPosition(out int updatedPosition))
+            catch (Exception ex)
             {
-                PlaybackPosition = updatedPosition;
-
-                PlaybackPositionChanged?.Invoke(this, new PlaybackPositionUpdateEventArgs()
-                {
-                    PlaybackPosition = updatedPosition
-                });
+                Console.WriteLine(ex.StackTrace);
+                //throw;
             }
         }
 
@@ -141,15 +152,20 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
         {
             IITTrack track = (IITTrack)iTrack;
 
-            Console.WriteLine(track.Name);
-            OnTrackChanged(new TrackUpdateEventArgs()
+            TrackInformation = new TrackInformation()
             {
                 Title = track.Name,
                 Artist = track.Artist,
                 Album = track.Album,
-                Length = track.Duration,
+                TrackLength = track.Duration,
                 MediaType = MediaType.Audio,
-            });
+            };
+
+            //Console.WriteLine(track.Name);
+            OnTrackChanged(new TrackUpdateEventArgs()
+            {
+                TrackInformation = TrackInformation
+            }); ;
         }
 
         /// <summary>
@@ -174,13 +190,9 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
         public int PlaybackPosition { get; set; }
 
         public int Volume { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public PlayStatus PlayStatus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public RepeatMode RepeatMode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public bool Shuffle { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public MediaType MediaType => throw new NotImplementedException();
 
         public PlaybackSettings PlaybackSettings { get; set; }
+        public TrackInformation TrackInformation { get; set; }
 
         protected virtual void OnTrackChanged(TrackUpdateEventArgs e)
         {
@@ -220,9 +232,24 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
         public void Dispose()
         {
             // Unsubscribe from events
+            _timer.Elapsed -= _timer_Elapsed;
             _application.OnPlayerPlayEvent -= _application_OnPlayerPlayEvent;
             _application.OnSoundVolumeChangedEvent -= _application_OnSoundVolumeChangedEvent;
             _application.OnQuittingEvent -= _application_OnQuittingEvent;
+
+            _timer.Enabled = false;
+
+            // Attempt to release resources and perform garbage collection
+            // Prevents high resource usage (due to multiple connections?)
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(_application);
+                GC.Collect();
+            }
+            catch (System.Runtime.InteropServices.InvalidComObjectException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             // Set to null
             _application = null;

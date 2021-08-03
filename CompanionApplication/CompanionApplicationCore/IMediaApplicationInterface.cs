@@ -34,12 +34,7 @@ namespace CompanionApplication.Core
 
     public class TrackUpdateEventArgs : EventArgs
     {
-        // Basic properties
-        public string Title { get; set; }
-        public string Artist { get; set; }
-        public string Album { get; set; }
-        public int Length { get; set; }
-        public MediaType MediaType { get; set; }
+        public TrackInformation TrackInformation { get; set; }
     }
 
     public class PlaybackSettingsUpdateEventArgs : EventArgs
@@ -70,6 +65,18 @@ namespace CompanionApplication.Core
     }
 
     /// <summary>
+    /// Struct for storing track information
+    /// </summary>
+    public struct TrackInformation
+    {
+        public string Title { get; set; }
+        public string Artist { get; set; }
+        public string Album { get; set; }
+        public int TrackLength { get; set; }
+        public MediaType MediaType { get; set; }
+    }
+
+    /// <summary>
     /// ???
     /// </summary>
     public delegate bool TrackUpdateDelegate(TrackUpdateEventArgs e);
@@ -80,11 +87,14 @@ namespace CompanionApplication.Core
     public interface IMediaApplicationInterface : IDisposable
     {
         //// Basic properties
-        string Title { get; }
-        string Artist { get; }
-        string Album { get; }
+        //string Title { get; }
+        //string Artist { get; }
+        //string Album { get; }
 
-        int TrackLength { get; }
+        //int TrackLength { get; }
+
+        TrackInformation TrackInformation { get; set; }
+
         int PlaybackPosition { get; }
 
         int Volume { get; set; }
@@ -94,8 +104,6 @@ namespace CompanionApplication.Core
         //bool Shuffle { get;}
 
         PlaybackSettings PlaybackSettings { get; set; }
-
-        MediaType MediaType { get; }
 
         // Control methods, make these async?
         void Next();

@@ -50,13 +50,6 @@ namespace CompanionApplication.Core
             }
         }
 
-        /// <summary>
-        /// For testing purposes
-        /// </summary>
-        private void Test(object sender, PlaybackPositionUpdateEventArgs e)
-        {
-            Console.WriteLine($"Position: {e.PlaybackPosition} s");
-        }
 
         /// <summary>
         /// May not work
@@ -74,7 +67,8 @@ namespace CompanionApplication.Core
                     _applicationInterface = mediaApplicationInterface.Value.Interface;
 
                     // Subscribe to events
-                    _applicationInterface.PlaybackPositionChanged += Test;
+                    _applicationInterface.PlaybackPositionChanged += TestPositionChanged;
+                    _applicationInterface.TrackChanged += TestTrackChanged;
 
                     return true;
                 }
@@ -82,5 +76,26 @@ namespace CompanionApplication.Core
             return false;
             //return null;
         }
+
+        /// <summary>
+        /// For testing purposes
+        /// </summary>
+        private void TestTrackChanged(object sender, TrackUpdateEventArgs e)
+        {
+            Console.WriteLine($"Title: {e.TrackInformation.Title}\n" +
+                $"Artist: {e.TrackInformation.Artist}\n" +
+                $"Album: {e.TrackInformation.Album}\n" +
+                $"Length: {e.TrackInformation.TrackLength}");
+        }
+
+        /// <summary>
+        /// For testing purposes
+        /// </summary>
+        private void TestPositionChanged(object sender, PlaybackPositionUpdateEventArgs e)
+        {
+            Console.WriteLine($"Position: {e.PlaybackPosition} s");
+        }
+
+        
     }
 }

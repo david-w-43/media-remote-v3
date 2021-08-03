@@ -35,6 +35,9 @@ namespace CompanionApplication.Interface
         /// </summary>
         private void Quit(object sender, EventArgs e)
         {
+            // Dispose of interface
+            _remoteManager.ApplicationInterface.Dispose();
+
             // Hide and dispose of notification tray icon
             _notifyIcon.Visible = false;
             _notifyIcon.Dispose();
