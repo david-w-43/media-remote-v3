@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
-namespace CompanionApplication
+namespace CompanionApplication.Core
 {
+    /// <summary>
+    /// Manages MEF and 
+    /// </summary>
     public class RemoteManager
     {
         // Used for MEF, contains parts
@@ -15,6 +18,9 @@ namespace CompanionApplication
         [ImportMany]
         internal IEnumerable<Lazy<IGetMediaApplicationInterface, IGetMediaApplicationInterfaceData>> MediaApplicationInterfaces;
 #pragma warning restore
+
+        IMediaApplicationInterface _applicationInterface;
+        public IMediaApplicationInterface ApplicationInterface { get => _applicationInterface; }
 
         /// <summary>
         /// Instantiate a RemoteManager object
@@ -35,8 +41,6 @@ namespace CompanionApplication
                 // Create the CompositionContainer with the catalog parts
                 _container = new CompositionContainer(catalog);
                 _container.ComposeParts(this);
-
-                
             }
             catch (CompositionException e)
             {
@@ -47,22 +51,36 @@ namespace CompanionApplication
         }
 
         /// <summary>
+        /// For testing purposes
+        /// </summary>
+        private void Test(object sender, PlaybackPositionUpdateEventArgs e)
+        {
+            Console.WriteLine($"Position: {e.PlaybackPosition} s");
+        }
+
+        /// <summary>
         /// May not work
         /// Gets the named media application interface
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IMediaApplicationInterface GetMediaApplicationInterface(string name)
+        public bool SetMediaApplicationInterface(string name)
         {
             foreach (var mediaApplicationInterface in MediaApplicationInterfaces)
             {
                 if (mediaApplicationInterface.Metadata.Name == name)
                 {
-                    return mediaApplicationInterface.Value.Interface;
+                    //return mediaApplicationInterface.Value.Interface;
+                    _applicationInterface = mediaApplicationInterface.Value.Interface;
+
+                    // Subscribe to events
+                    _applicationInterface.PlaybackPositionChanged += Test;
+
+                    return true;
                 }
             }
-
-            return null;
+            return false;
+            //return null;
         }
     }
 }
