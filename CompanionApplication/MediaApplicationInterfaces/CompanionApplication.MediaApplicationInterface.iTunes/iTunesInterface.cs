@@ -96,7 +96,7 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
                         {
                             PlaybackPosition = updatedPosition
                         });
-                    } 
+                    }
                 }
             }
             catch (Exception ex)
@@ -179,17 +179,17 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
             });
         }
 
-        public string Title => throw new NotImplementedException();
+        public int PlaybackPosition
+        {
+            get => _application.PlayerPosition;
+            set => _application.PlayerPosition = value;
+        }
 
-        public string Artist => throw new NotImplementedException();
-
-        public string Album => throw new NotImplementedException();
-
-        public int TrackLength => throw new NotImplementedException();
-
-        public int PlaybackPosition { get; set; }
-
-        public int Volume { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Volume 
+        { 
+            get => _application.SoundVolume; 
+            set => _application.SoundVolume = value; 
+        }
 
         public PlaybackSettings PlaybackSettings { get; set; }
         public TrackInformation TrackInformation { get; set; }
@@ -199,32 +199,47 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
             TrackChanged?.Invoke(this, e);
         }
 
-        public void Disconnect()
+        public void Next() => _application.NextTrack();
+
+        public void Prev() => _application.PreviousTrack();
+
+        public void Backtrack() => _application.BackTrack();
+        
+        public void PlayPause() => _application.PlayPause();
+
+        public void Play()
         {
-            throw new NotImplementedException();
+            // Resume playback (unpause or cancel ffw /rewind) of current track, 
+            // Play() if nothing currently playing
+            if (_application.CurrentTrack != null)
+                _application.Resume();
+            else
+                _application.Play();
         }
+
+        public void Pause() => _application.Pause();
+
+        public void Stop() => _application.Stop();
+
+        public void FastForward() => _application.FastForward();
+
+        public void Rewind() => _application.Rewind();
+
+        public void ToggleShuffle() =>
+            _application.CurrentPlaylist.Shuffle = !_application.CurrentPlaylist.Shuffle;
 
         public void IncrementRepeat()
         {
-            throw new NotImplementedException();
+            // I think it should be Off -> All -> One, so I am decrementing it
+            ITPlaylistRepeatMode songRepeat = _application.CurrentPlaylist.SongRepeat;
+
+            if (songRepeat == 0)
+                songRepeat = ITPlaylistRepeatMode.ITPlaylistRepeatModeAll;
+            else
+                songRepeat--;
         }
 
-        public void Next()
-        {
-            _application.NextTrack();
-        }
-
-        public void PlayPause()
-        {
-            _application.PlayPause();
-        }
-
-        public void Prev()
-        {
-            _application.BackTrack();
-        }
-
-        public void ToggleShuffle()
+        public void Disconnect()
         {
             throw new NotImplementedException();
         }
@@ -254,5 +269,7 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
             // Set to null
             _application = null;
         }
+
+
     }
 }

@@ -79,46 +79,113 @@ namespace CompanionApplication.Core
     /// <summary>
     /// ???
     /// </summary>
-    public delegate bool TrackUpdateDelegate(TrackUpdateEventArgs e);
+    //public delegate bool TrackUpdateDelegate(TrackUpdateEventArgs e);
 
     /// <summary>
     /// Interface for all media applications
     /// </summary>
     public interface IMediaApplicationInterface : IDisposable
     {
-        //// Basic properties
-        //string Title { get; }
-        //string Artist { get; }
-        //string Album { get; }
-
-        //int TrackLength { get; }
-
+        /// <summary>
+        /// Current track information
+        /// </summary>
         TrackInformation TrackInformation { get; set; }
 
+        /// <summary>
+        /// Playback position in seconds
+        /// </summary>
         int PlaybackPosition { get; }
 
+        /// <summary>
+        /// Volume, application-defined
+        /// </summary>
         int Volume { get; set; }
 
-        //PlayStatus PlayStatus { get => PlaybackSettings.; }
-        //RepeatMode RepeatMode { get; }
-        //bool Shuffle { get;}
-
+        /// <summary>
+        /// Playback settings (status, repeat mode, shuffle)
+        /// </summary>
         PlaybackSettings PlaybackSettings { get; set; }
 
-        // Control methods, make these async?
+        /// <summary>
+        /// Skip to next track
+        /// </summary>
         void Next();
+
+        /// <summary>
+        /// Play previous track
+        /// </summary>
         void Prev();
+
+        /// <summary>
+        /// Skip to beginning of current track,
+        /// play previous if already at start
+        /// </summary>
+        void Backtrack();
+
+        /// <summary>
+        /// Toggle play/pause
+        /// </summary>
         void PlayPause();
 
+        /// <summary>
+        /// Play (application defined)
+        /// </summary>
+        void Play();
+
+        /// <summary>
+        /// Pause current track
+        /// </summary>
+        void Pause();
+
+        /// <summary>
+        /// Stop playback
+        /// </summary>
+        void Stop();
+
+        /// <summary>
+        /// Fast forward current track
+        /// </summary>
+        void FastForward();
+
+        /// <summary>
+        /// Rewind playback
+        /// </summary>
+        void Rewind();
+
+        /// <summary>
+        /// Toggle playlist shuffle
+        /// </summary>
         void ToggleShuffle();
+
+        /// <summary>
+        /// Cycles through repeat modes
+        /// </summary>
         void IncrementRepeat();
 
+        /// <summary>
+        /// Disconnect from the application
+        /// </summary>
         void Disconnect();
 
         // Should have events in here too
+        /// <summary>
+        /// Raised when a track is changed
+        /// </summary>
         event EventHandler<TrackUpdateEventArgs> TrackChanged;
+
+        /// <summary>
+        /// Raised when the volume is changed
+        /// </summary>
         event EventHandler<VolumeUpdateEventArgs> VolumeChanged;
+
+        /// <summary>
+        /// Raised when the playback settings (play status, repeat, shuffle) change
+        /// </summary>
         event EventHandler<PlaybackSettingsUpdateEventArgs> PlaybackSettingsChanged;
+
+        /// <summary>
+        /// Raised when the playback position changes
+        /// </summary>
         event EventHandler<PlaybackPositionUpdateEventArgs> PlaybackPositionChanged;
     }
 
