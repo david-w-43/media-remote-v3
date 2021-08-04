@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplicationCore", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplication.Interface", "CompanionApplicationInterface\CompanionApplication.Interface.csproj", "{78F8BA9F-4894-4348-8798-AC4DDA023DDA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VLCInterface", "MediaApplicationInterfaces\VLCInterface\VLCInterface.csproj", "{2FFEDBF2-D559-4BA4-B579-F8650C1CABA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,12 +34,17 @@ Global
 		{78F8BA9F-4894-4348-8798-AC4DDA023DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78F8BA9F-4894-4348-8798-AC4DDA023DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78F8BA9F-4894-4348-8798-AC4DDA023DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FFEDBF2-D559-4BA4-B579-F8650C1CABA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FFEDBF2-D559-4BA4-B579-F8650C1CABA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FFEDBF2-D559-4BA4-B579-F8650C1CABA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FFEDBF2-D559-4BA4-B579-F8650C1CABA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A567371D-1631-4596-B136-566DC8D05AEA} = {C2F335F0-7309-495F-A9D3-14BB156DD108}
+		{2FFEDBF2-D559-4BA4-B579-F8650C1CABA2} = {C2F335F0-7309-495F-A9D3-14BB156DD108}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23EFEFE1-5D56-4DA7-8429-FCA9EBCE6024}

@@ -19,8 +19,28 @@ namespace CompanionApplication.Core
         internal IEnumerable<Lazy<IGetMediaApplicationInterface, IGetMediaApplicationInterfaceData>> MediaApplicationInterfaces;
 #pragma warning restore
 
-        IMediaApplicationInterface _applicationInterface;
+        private IMediaApplicationInterface _applicationInterface;
+
+        /// <summary>
+        /// Active application interface
+        /// </summary>
         public IMediaApplicationInterface ApplicationInterface { get => _applicationInterface; }
+
+        /// <summary>
+        /// List of names of available media application interface
+        /// </summary>
+        public List<string> AvailableMediaApplicationInterfaces 
+        { 
+            get
+            {
+                List<string> list = new List<string>();
+
+                foreach (var part in MediaApplicationInterfaces)
+                    list.Add(part.Metadata.Name);
+
+                return list;
+            }
+        }
 
         /// <summary>
         /// Instantiate a RemoteManager object

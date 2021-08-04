@@ -11,7 +11,7 @@ using iTunesLib;
 namespace CompanionApplication.MediaApplicationInterfaces.iTunes
 {
     /// <summary>
-    /// iTunes interface, currently containing nothing
+    /// iTunes interface
     /// </summary>
     [Export(typeof(IGetMediaApplicationInterface))]
     [ExportMetadata("Name", "iTunes")]

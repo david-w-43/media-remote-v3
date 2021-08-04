@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using CompanionApplication.Core;
 
@@ -12,22 +13,59 @@ namespace CompanionApplication.Interface
 
         internal TrayIcon()
         {
+            // Instantiate remote manager
+            _remoteManager = new RemoteManager();
+
             // Instantiate notification tray icon
             _notifyIcon = new NotifyIcon()
             {
                 Icon = Properties.Resources.DisplayIcon,
-                ContextMenu = new ContextMenu(new MenuItem[]
-                {
-                    new MenuItem("Test", Test),
-                    new MenuItem("-"), // Separator
-                    new MenuItem("Quit", Quit)
-                }),
+                ContextMenu = new ContextMenu(),
                 Visible = true,
                 Text = "Media Remote Companion",
             };
 
-            _remoteManager = new RemoteManager();
+            // Populate context menu
+            _notifyIcon.ContextMenu.MenuItems.AddRange(new MenuItem[]
+            {
+                new MenuItem("Test", Test),
+                new MenuItem("-"), // Separator
+            });
+            _notifyIcon.ContextMenu.MenuItems.AddRange(LoadInterfaces());
+            _notifyIcon.ContextMenu.MenuItems.AddRange(new MenuItem[]
+            {
+                new MenuItem("-"), // Separator
+                new MenuItem("Quit", Quit)
+            });
+
             var mediaInterface = _remoteManager.SetMediaApplicationInterface("iTunes");
+        }
+
+        /// <summary>
+        /// Automatically create context menu items to select interface
+        /// </summary>
+        private MenuItem[] LoadInterfaces()
+        {
+            MenuItem[] menuItems = new MenuItem[_remoteManager.AvailableMediaApplicationInterfaces.Count];
+
+            for (int i = 0; i < menuItems.Length; i++)
+            {
+                string name = _remoteManager.AvailableMediaApplicationInterfaces[i];
+                menuItems[i] = new MenuItem(name, InterfaceSelected)
+                {
+                    RadioCheck = true,
+                };
+            }
+
+            return menuItems;
+        }
+
+        /// <summary>
+        /// Triggered when interface is selected from context menu
+        /// </summary>
+        private void InterfaceSelected(object sender, EventArgs e)
+        {
+
         }
 
         /// <summary>
