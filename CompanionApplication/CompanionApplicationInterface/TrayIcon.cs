@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using CompanionApplication.Core;
+using System.Linq;
 
 namespace CompanionApplication.Interface
 {
+    internal enum MenuItemType
+    {
+        ApplicationInterface,
+        Other
+    }
+
     class TrayIcon : ApplicationContext
     {
         static RemoteManager _remoteManager;
@@ -38,7 +45,8 @@ namespace CompanionApplication.Interface
                 new MenuItem("Quit", Quit)
             });
 
-            var mediaInterface = _remoteManager.SetMediaApplicationInterface("iTunes");
+            // For testing purposes, set interface to iTunes
+            //var mediaInterface = _remoteManager.SetMediaApplicationInterface("iTunes");
         }
 
         /// <summary>
@@ -54,6 +62,7 @@ namespace CompanionApplication.Interface
                 menuItems[i] = new MenuItem(name, InterfaceSelected)
                 {
                     RadioCheck = true,
+                    Tag = MenuItemType.ApplicationInterface,
                 };
             }
 
@@ -62,10 +71,32 @@ namespace CompanionApplication.Interface
 
         /// <summary>
         /// Triggered when interface is selected from context menu
+        /// Sets interface and checks appropriate menu item
         /// </summary>
         private void InterfaceSelected(object sender, EventArgs e)
         {
+            // Uncheck other applicaiton interface items
+            foreach (MenuItem menuItem in _notifyIcon.ContextMenu.MenuItems)
+            {
+                if (Equals(menuItem.Tag, MenuItemType.ApplicationInterface) 
+                    && menuItem != (MenuItem)sender)
+                {
+                    menuItem.Checked = false;
+                }
+            }
 
+            // Check this item
+            ((MenuItem)sender).Checked = true;
+
+            // If the interface is different to the one already selected
+            string name = ((MenuItem)sender).Text;
+            if (name != _remoteManager.ApplicationInterface.Name)
+            {
+            _remoteManager.ApplicationInterface.Dispose();
+
+            // Set interface to selected
+            _remoteManager.SetMediaApplicationInterface(name);
+            }
         }
 
         /// <summary>

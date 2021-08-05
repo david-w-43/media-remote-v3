@@ -87,6 +87,11 @@ namespace CompanionApplication.Core
     public interface IMediaApplicationInterface : IDisposable
     {
         /// <summary>
+        /// Name of the interface
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// Current track information
         /// </summary>
         TrackInformation TrackInformation { get; set; }

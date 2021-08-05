@@ -35,6 +35,8 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
 
     public class iTunesInterface : IMediaApplicationInterface
     {
+        public string Name { get => "iTunes"; }
+
         private iTunesApp _application;
 
         private Timer _timer;
