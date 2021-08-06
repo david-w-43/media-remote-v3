@@ -34,6 +34,8 @@ namespace CompanionApplication.MediaApplicationInterfaces.VLC
 
     public class VLCInterface : IMediaApplicationInterface
     {
+        public string Name { get => "VLC"; }
+
         public TrackInformation TrackInformation { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public int PlaybackPosition => throw new NotImplementedException();

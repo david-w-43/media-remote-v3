@@ -17,9 +17,21 @@ namespace CompanionApplication.Core
         // Import all available Media Application Interfaces
         [ImportMany]
         internal IEnumerable<Lazy<IGetMediaApplicationInterface, IGetMediaApplicationInterfaceData>> MediaApplicationInterfaces;
+
+        // Import all available addins
+        [ImportMany]
+        internal IEnumerable<Lazy<IGetAddin, IGetAddinData>> Addins;
 #pragma warning restore
 
+        /// <summary>
+        /// Current application interface - only one can be loaded
+        /// </summary>
         private IMediaApplicationInterface _applicationInterface;
+
+        /// <summary>
+        /// Currently loaded addins - multiple can be loaded or unloaded
+        /// </summary>
+        private List<IAddin> _addins = new List<IAddin>();
 
         /// <summary>
         /// Active application interface
@@ -30,13 +42,29 @@ namespace CompanionApplication.Core
         /// List of names of available media application interface
         /// </summary>
         public List<string> AvailableMediaApplicationInterfaces 
-        { 
+        {
             get
             {
                 List<string> list = new List<string>();
 
                 foreach (var part in MediaApplicationInterfaces)
                     list.Add(part.Metadata.Name);
+
+                return list;
+            }
+        }
+
+        /// <summary>
+        /// List of names of loaded addins
+        /// </summary>
+        public List<string> LoadedAddins 
+        {
+            get
+            {
+                List<string> list = new List<string>();
+
+                foreach (var addin in Addins)
+                    list.Add(addin.Metadata.Name);
 
                 return list;
             }
@@ -67,6 +95,17 @@ namespace CompanionApplication.Core
                 // If composition exception occurs, display in console
                 Console.WriteLine(e.ToString());
                 throw e;
+            }
+
+            // Load all addins (use settings to select?)
+            LoadAddins();
+        }
+
+        private void LoadAddins()
+        {
+            foreach (var addin in Addins)
+            {
+                _addins.Add(addin.Value.Addin);
             }
         }
 

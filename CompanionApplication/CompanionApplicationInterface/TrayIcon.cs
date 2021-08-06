@@ -89,13 +89,15 @@ namespace CompanionApplication.Interface
             ((MenuItem)sender).Checked = true;
 
             // If the interface is different to the one already selected
-            string name = ((MenuItem)sender).Text;
-            if (name != _remoteManager.ApplicationInterface.Name)
+            string selectedName = ((MenuItem)sender).Text;
+            string currentName = _remoteManager.ApplicationInterface?.Name;
+            if (currentName == null || selectedName != currentName)
             {
-            _remoteManager.ApplicationInterface.Dispose();
+                // Dispose of current interface
+                _remoteManager.ApplicationInterface?.Dispose();
 
-            // Set interface to selected
-            _remoteManager.SetMediaApplicationInterface(name);
+                // Set interface to selected
+                _remoteManager.SetMediaApplicationInterface(selectedName);
             }
         }
 
@@ -105,7 +107,7 @@ namespace CompanionApplication.Interface
         private void Quit(object sender, EventArgs e)
         {
             // Dispose of interface
-            _remoteManager.ApplicationInterface.Dispose();
+            _remoteManager.ApplicationInterface?.Dispose();
 
             // Hide and dispose of notification tray icon
             _notifyIcon.Visible = false;

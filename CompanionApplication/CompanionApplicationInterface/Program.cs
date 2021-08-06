@@ -17,13 +17,20 @@ namespace CompanionApplication.Interface
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
-            Application.Run(new TrayIcon());
 
-            //_remoteManager = new RemoteManager();
-            //var mediaInterface = _remoteManager.GetMediaApplicationInterface("iTunes");
+            // Get list of processes with same name
+            string applicationName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+            System.Diagnostics.Process[] processes = System.Diagnostics.Process.GetProcessesByName(applicationName);
 
-            //mediaInterface.Next();
+            // Exits application if more than one exists
+            if (processes.Count() > 1)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                Application.Run(new TrayIcon());
+            }
         }
     }
 }

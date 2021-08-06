@@ -196,6 +196,9 @@ namespace CompanionApplication.Core
 
     public interface IGetMediaApplicationInterface
     {
+        /// <summary>
+        /// Gets interface object, returns new if not present
+        /// </summary>
         IMediaApplicationInterface Interface { get; }
     }
 

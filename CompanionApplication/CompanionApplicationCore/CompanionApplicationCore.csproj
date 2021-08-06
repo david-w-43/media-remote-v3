@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAddin.cs" />
     <Compile Include="IMediaApplicationInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteManager.cs" />
