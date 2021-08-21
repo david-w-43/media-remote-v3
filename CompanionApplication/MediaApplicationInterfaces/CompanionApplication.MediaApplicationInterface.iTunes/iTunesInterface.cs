@@ -92,7 +92,7 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
                     // Get updated playback position
                     if (GetPlaybackPosition(out int updatedPosition))
                     {
-                        PlaybackPosition = updatedPosition;
+                        _measuredPlaybackPosition = updatedPosition;
 
                         PlaybackPositionChanged?.Invoke(this, new PlaybackPositionUpdateEventArgs()
                         {
@@ -139,7 +139,7 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
         {
             updatedPosition = _application.PlayerPosition;
 
-            return updatedPosition != PlaybackPosition;
+            return updatedPosition != _measuredPlaybackPosition;
         }
 
         private void _application_OnQuittingEvent()
@@ -180,6 +180,8 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
                 Volume = newVolume
             });
         }
+
+        private int _measuredPlaybackPosition;
 
         public int PlaybackPosition
         {
