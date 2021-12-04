@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTunesInterface", "MediaApp
 		{220EB77E-7E5F-4F2A-88A3-671F3A59C207} = {220EB77E-7E5F-4F2A-88A3-671F3A59C207}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplicationCore", "CompanionApplicationCore\CompanionApplicationCore.csproj", "{220EB77E-7E5F-4F2A-88A3-671F3A59C207}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplication.Core", "CompanionApplicationCore\CompanionApplication.Core.csproj", "{220EB77E-7E5F-4F2A-88A3-671F3A59C207}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplication.Interface", "CompanionApplicationInterface\CompanionApplication.Interface.csproj", "{78F8BA9F-4894-4348-8798-AC4DDA023DDA}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Addins", "Addins", "{F7EA5DB4-49F0-4FC3-9A11-EF69C7762E37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordRP", "Addins\DiscordRP\DiscordRP.csproj", "{64F5DB1D-F124-48D5-A2D5-D1AF3A196C85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanionApplication.Tests", "CompanionApplication.Tests\CompanionApplication.Tests.csproj", "{A7C38CD0-7BF6-416C-AABE-22C6E5021A84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,10 @@ Global
 		{64F5DB1D-F124-48D5-A2D5-D1AF3A196C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64F5DB1D-F124-48D5-A2D5-D1AF3A196C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64F5DB1D-F124-48D5-A2D5-D1AF3A196C85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7C38CD0-7BF6-416C-AABE-22C6E5021A84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7C38CD0-7BF6-416C-AABE-22C6E5021A84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7C38CD0-7BF6-416C-AABE-22C6E5021A84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7C38CD0-7BF6-416C-AABE-22C6E5021A84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

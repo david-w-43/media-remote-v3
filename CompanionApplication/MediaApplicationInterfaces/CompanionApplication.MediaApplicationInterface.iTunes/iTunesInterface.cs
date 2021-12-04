@@ -66,6 +66,7 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
             _application.OnPlayerPlayEvent += _application_OnPlayerPlayEvent;
             _application.OnSoundVolumeChangedEvent += _application_OnSoundVolumeChangedEvent;
             _application.OnQuittingEvent += _application_OnQuittingEvent;
+            _application.OnAboutToPromptUserToQuitEvent += _application_OnQuittingEvent;
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
                         // Update property
                         PlaybackSettings = updatedSettings;
 
-                        PlaybackSettingsChanged?.Invoke(this, new PlaybackSettingsUpdateEventArgs()
+                        PlaybackSettingsChanged?.Invoke(null, new PlaybackSettingsUpdateEventArgs()
                         {
                             PlaybackSettings = updatedSettings
                         });
@@ -94,7 +95,7 @@ namespace CompanionApplication.MediaApplicationInterfaces.iTunes
                     {
                         _measuredPlaybackPosition = updatedPosition;
 
-                        PlaybackPositionChanged?.Invoke(this, new PlaybackPositionUpdateEventArgs()
+                        PlaybackPositionChanged?.Invoke(null, new PlaybackPositionUpdateEventArgs()
                         {
                             PlaybackPosition = updatedPosition
                         });

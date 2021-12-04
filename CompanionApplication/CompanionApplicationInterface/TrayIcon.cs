@@ -35,6 +35,7 @@ namespace CompanionApplication.Interface
             // Populate context menu
             _notifyIcon.ContextMenu.MenuItems.AddRange(new MenuItem[]
             {
+                new MenuItem("Settings...", OpenSettings),
                 new MenuItem("Test", Test),
                 new MenuItem("-"), // Separator
             });
@@ -44,9 +45,6 @@ namespace CompanionApplication.Interface
                 new MenuItem("-"), // Separator
                 new MenuItem("Quit", Quit)
             });
-
-            // For testing purposes, set interface to iTunes
-            //var mediaInterface = _remoteManager.SetMediaApplicationInterface("iTunes");
         }
 
         /// <summary>
@@ -123,6 +121,38 @@ namespace CompanionApplication.Interface
         private void Test(object sender, EventArgs e)
         {
             _remoteManager.ApplicationInterface?.Next();
+        }
+
+        /// <summary>
+        /// Opens settings form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenSettings(object sender, EventArgs e)
+        {
+            SettingsForm form = new SettingsForm(_remoteManager);
+
+            switch (form.ShowDialog())
+            {
+                case DialogResult.None:
+                    break;
+                case DialogResult.OK:
+                    break;
+                case DialogResult.Cancel:
+                    break;
+                case DialogResult.Abort:
+                    break;
+                case DialogResult.Retry:
+                    break;
+                case DialogResult.Ignore:
+                    break;
+                case DialogResult.Yes:
+                    break;
+                case DialogResult.No:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

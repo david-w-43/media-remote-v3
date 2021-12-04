@@ -102,7 +102,7 @@ namespace CompanionApplication.Core
         internal byte[] ToByteArray()
         {
             // Get text as array of bytes
-            byte[] textBytes = RemoteConnection.Encoding.GetBytes(Text);
+            byte[] textBytes = RemoteManager.Encoding.GetBytes(Text);
             int length = 1 + textBytes.Length;
 
             byte[] toReturn =  new byte[length];
@@ -122,13 +122,12 @@ namespace CompanionApplication.Core
     {
         // Constant definitions
         private const int _baudRate = 115200;
-        internal static Encoding Encoding { get => Encoding.UTF8;} 
 
         // Serial port to communicate with
         SerialPort _port;
 
-        // Queue in which to store received transmissions
-        Queue<string> _transmissions = new Queue<string>();
+
+        public event EventHandler<TransmissionReceivedEventArgs> TransmissionReceived;
 
         /// <summary>
         /// Instantiates a RemoteConnection
@@ -152,7 +151,7 @@ namespace CompanionApplication.Core
                 {
                     PortName = name,
                     BaudRate = _baudRate,
-                    Encoding = Encoding,
+                    Encoding = RemoteManager.Encoding,
                 };
 
                 // Attempt to open port and handshake with remote
@@ -241,11 +240,17 @@ namespace CompanionApplication.Core
         /// <param name="e"></param>
         public void DataReceived(object sender, EventArgs e)
         {
+            // Queue in which to store received transmissions
+            Queue<string> _transmissions = new Queue<string>();
+
             // While there are bytes to read
             while (_port.BytesToRead > 0)
             {
                 // Add full messages to queue
                 _transmissions.Enqueue(_port.ReadTo(ControlCharacters.EndOfTransmission.ToString()));
+
+                // Raise transmission recieved event
+                TransmissionReceived?.Invoke(this, new TransmissionReceivedEventArgs { Transmissions = _transmissions });
             }
         }
 

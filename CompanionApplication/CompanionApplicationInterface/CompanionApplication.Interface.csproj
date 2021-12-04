@@ -82,9 +82,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CompanionApplicationCore\CompanionApplicationCore.csproj">
+    <ProjectReference Include="..\CompanionApplicationCore\CompanionApplication.Core.csproj">
       <Project>{220eb77e-7e5f-4f2a-88a3-671f3a59c207}</Project>
-      <Name>CompanionApplicationCore</Name>
+      <Name>CompanionApplication.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
-﻿namespace CompanionApplicationInterface
+﻿namespace CompanionApplication.Interface
 {
-    partial class Form1
+    partial class SettingsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,13 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // Form1
+            // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(546, 347);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Settings";
+            this.Text = "Settings";
+            this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.ResumeLayout(false);
 
         }

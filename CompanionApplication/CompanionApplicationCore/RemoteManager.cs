@@ -49,6 +49,11 @@ namespace CompanionApplication.Core
         public IMediaApplicationInterface ApplicationInterface { get => _applicationInterface; }
 
         /// <summary>
+        /// System-wide text encoding
+        /// </summary>
+        public static System.Text.Encoding Encoding { get => System.Text.Encoding.UTF8; }
+
+        /// <summary>
         /// List of names of available media application interface
         /// </summary>
         public List<string> AvailableMediaApplicationInterfaces 
@@ -111,8 +116,16 @@ namespace CompanionApplication.Core
             LoadAddins();
 
             // Connect to remote
-            _remoteConnection = new RemoteConnection();
-
+            try
+            {
+                _remoteConnection = new RemoteConnection();
+            }
+            catch (RemoteNotPresentException)
+            {
+                Console.WriteLine("Failed to connect to remote");
+                throw;
+            }
+            
             // Create command handler
             _commandHandler = new CommandHandler(_applicationInterface, _remoteConnection);
         }

@@ -14,9 +14,14 @@ namespace CompanionApplication.Core
 
     }
 
+    internal class TransmissionReceivedEventArgs : EventArgs
+    {
+        internal Queue<string> Transmissions { get; set; }
+    }
+
+
     internal interface IRemoteConnection : IDisposable
     {
-
         /// <summary>
         /// Disconnect from the remote
         /// </summary>
@@ -34,8 +39,12 @@ namespace CompanionApplication.Core
         /// <param name="commands"></param>
         void Send(Queue<Command> commands);
 
-        void DataReceived(object sender, EventArgs e);
+        //void DataReceived(object sender, EventArgs e);
 
+        /// <summary>
+        /// Transmission received by remote
+        /// </summary>
+        event EventHandler<TransmissionReceivedEventArgs> TransmissionReceived;
 
         /// <summary>
         /// Pushes updated track information to remote
