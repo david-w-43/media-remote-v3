@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestMediaInterface.cs" />
+    <Compile Include="TestRemoteInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
