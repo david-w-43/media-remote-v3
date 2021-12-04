@@ -29,6 +29,16 @@ namespace CompanionApplication.Core
         private IMediaApplicationInterface _applicationInterface;
 
         /// <summary>
+        /// Current remote connection
+        /// </summary>
+        private IRemoteConnection _remoteConnection;
+
+        /// <summary>
+        /// Command handler
+        /// </summary>
+        private CommandHandler _commandHandler;
+
+        /// <summary>
         /// Currently loaded addins - multiple can be loaded or unloaded
         /// </summary>
         private List<IAddin> _addins = new List<IAddin>();
@@ -99,6 +109,12 @@ namespace CompanionApplication.Core
 
             // Load all addins (use settings to select?)
             LoadAddins();
+
+            // Connect to remote
+            _remoteConnection = new RemoteConnection();
+
+            // Create command handler
+            _commandHandler = new CommandHandler(_applicationInterface, _remoteConnection);
         }
 
         private void LoadAddins()
@@ -126,33 +142,17 @@ namespace CompanionApplication.Core
                     _applicationInterface = mediaApplicationInterface.Value.Interface;
 
                     // Subscribe to events
-                    _applicationInterface.PlaybackPositionChanged += TestPositionChanged;
-                    _applicationInterface.TrackChanged += TestTrackChanged;
+                    _applicationInterface.PlaybackPositionChanged += _remoteConnection.PositionChanged;
+                    _applicationInterface.TrackChanged += _remoteConnection.TrackChanged;
+
+                    // Change command handler interface?
+                    //_commandHandler.ApplicationInterface = _applicationInterface;
 
                     return true;
                 }
             }
             return false;
             //return null;
-        }
-
-        /// <summary>
-        /// For testing purposes
-        /// </summary>
-        private void TestTrackChanged(object sender, TrackUpdateEventArgs e)
-        {
-            Console.WriteLine($"Title: {e.TrackInformation.Title}\n" +
-                $"Artist: {e.TrackInformation.Artist}\n" +
-                $"Album: {e.TrackInformation.Album}\n" +
-                $"Length: {e.TrackInformation.TrackLength}");
-        }
-
-        /// <summary>
-        /// For testing purposes
-        /// </summary>
-        private void TestPositionChanged(object sender, PlaybackPositionUpdateEventArgs e)
-        {
-            Console.WriteLine($"Position: {e.PlaybackPosition} s");
         }
 
         

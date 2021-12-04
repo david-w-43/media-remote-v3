@@ -4,10 +4,10 @@ using System.Text;
 using System.IO.Ports;
 
 
-namespace CompanionApplication
+namespace CompanionApplication.Core
 {
     /// <summary>
-    /// Stores useful control characters
+    /// Shorthand for control characters used in communication with remote
     /// </summary>
     internal class ControlCharacters
     {
@@ -22,15 +22,45 @@ namespace CompanionApplication
         internal static char RecordSeparator { get => '\u0030'; }
     }
 
+    /// <summary>
+    /// Command IDs
+    /// </summary>
+    internal enum CommandID : byte
+    {
+        SYSTEM = 0x00,
+        Handshake,
+        SetRTC,
+        SetState,
+
+        DISPLAY = 0x10,
+        SetBacklight,
+        SetContrast,
+
+        MEDIA = 0x20,
+        SetTrack,
+        SetPosition,
+        SetVolume,
+        SetPlaybackSettings,
+    }
+
+    /// <summary>
+    /// Contains data and formatting capabilities for commands to be 
+    /// issued to remote
+    /// </summary>
     internal class Command
     {
-        internal byte CommandID { get; }
+        internal CommandID CommandID { get; }
         internal string Text { get; }
 
-        internal Command(byte commandID, string text)
+        /// <summary>
+        /// Create command with specified ID and text
+        /// </summary>
+        /// <param name="commandID"></param>
+        /// <param name="text"></param>
+        internal Command(CommandID commandID, byte fieldID, string text)
         {
             CommandID = commandID;
-            Text = text;
+            Text = WrapText(fieldID, text);
         }
 
         /// <summary>
@@ -38,16 +68,16 @@ namespace CompanionApplication
         /// </summary>
         /// <param name="commandID"></param>
         /// <param name="records"></param>
-        internal Command(byte commandID, string[] records)
+        internal Command(CommandID commandID, byte[] fieldIDs, string[] fields)
         {
             string text = "";
-            for (int i = 0; i < records.Length; i++)
+            for (int i = 0; i < fields.Length; i++)
             {
                 // Add record to text
-                text += records[i];
+                text += WrapText(fieldIDs[i], fields[i]);
 
                 // Add record separator
-                if (i < records.Length)
+                if (i < fields.Length)
                     text += ControlCharacters.RecordSeparator;
             }
 
@@ -55,6 +85,20 @@ namespace CompanionApplication
             Text = text;
         }
 
+        /// <summary>
+        /// Wrap text with field, start and end control characters
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string WrapText(byte fieldID, string text)
+        {
+            return fieldID + ControlCharacters.StartOfText + text + ControlCharacters.EndOfText;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Command text as a byte array</returns>
         internal byte[] ToByteArray()
         {
             // Get text as array of bytes
@@ -64,7 +108,7 @@ namespace CompanionApplication
             byte[] toReturn =  new byte[length];
             
             // Place data in array to return
-            toReturn[0] = CommandID;
+            toReturn[0] = (byte)CommandID;
             textBytes.CopyTo(toReturn, 1);
 
             return toReturn;
@@ -74,7 +118,7 @@ namespace CompanionApplication
     /// <summary>
     /// Handles serial communication with the remote
     /// </summary>
-    internal class RemoteConnection
+    internal class RemoteConnection : IRemoteConnection
     {
         // Constant definitions
         private const int _baudRate = 115200;
@@ -83,6 +127,9 @@ namespace CompanionApplication
         // Serial port to communicate with
         SerialPort _port;
 
+        // Queue in which to store received transmissions
+        Queue<string> _transmissions = new Queue<string>();
+
         /// <summary>
         /// Instantiates a RemoteConnection
         /// </summary>
@@ -90,6 +137,9 @@ namespace CompanionApplication
         {
             // Get names of ports connected
             Stack<string> portNames = new Stack<string>(SerialPort.GetPortNames());
+
+            // Successful connection flag
+            bool connected = false;
             
             // TODO: Push most recently successful to stack
             
@@ -111,7 +161,7 @@ namespace CompanionApplication
                     _port.Open();
 
                     // Write name to serial
-                    Send(new Command(0, name));
+                    Send(new Command(0, 0, name));
 
                     // Wait for response
                     string response = Read();
@@ -119,6 +169,12 @@ namespace CompanionApplication
                     // Expect remote to echo port name
                     if (response != name)
                         continue;
+                    else
+                    {
+                        // Remote has been found
+                        connected = true;
+                        break;
+                    }
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -132,11 +188,19 @@ namespace CompanionApplication
                 }
             }
 
+            // Throw exception if not connected
+            if (!connected)
+                throw new RemoteNotPresentException();
+            else
+            {
+                // Subscribe to DataRecieved event
+                _port.DataReceived += DataReceived;
+            }
             
         }
 
         
-        void Send(Command command)
+        public void Send(Command command)
         {
             byte[] buffer = command.ToByteArray();
             _port.Write(buffer, 0, buffer.Length);
@@ -148,6 +212,54 @@ namespace CompanionApplication
             string received = _port.ReadTo(ControlCharacters.EndOfTransmission.ToString());
 
             return received;
+        }
+
+        public void Disconnect()
+        {
+            _port.Dispose();
+        }
+
+        /// <summary>
+        /// Send a queue of commands
+        /// </summary>
+        /// <param name="commands"></param>
+        public void Send(Queue<Command> commands)
+        {
+            while (commands.Count > 0)
+                Send(commands.Dequeue());
+        }
+
+        public void Dispose()
+        {
+            Disconnect();
+        }
+
+        /// <summary>
+        /// Called when data received by serial port
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void DataReceived(object sender, EventArgs e)
+        {
+            // While there are bytes to read
+            while (_port.BytesToRead > 0)
+            {
+                // Add full messages to queue
+                _transmissions.Enqueue(_port.ReadTo(ControlCharacters.EndOfTransmission.ToString()));
+            }
+        }
+
+        public void TrackChanged(object sender, TrackUpdateEventArgs e)
+        {
+            Console.WriteLine($"Title: {e.TrackInformation.Title}\n" +
+                $"Artist: {e.TrackInformation.Artist}\n" +
+                $"Album: {e.TrackInformation.Album}\n" +
+                $"Length: {e.TrackInformation.TrackLength}");
+        }
+
+        public void PositionChanged(object sender, PlaybackPositionUpdateEventArgs e)
+        {
+            Console.WriteLine($"Position: {e.PlaybackPosition} s");
         }
     }
 }
